@@ -6,7 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { classes, students } from "@/data/dashboard";
+import { useDashboard, useHasRole } from "@/lib/dashboard-hooks";
+import { useServerFn } from "@tanstack/react-start";
+import { saveAttendance } from "@/lib/dashboard-data.functions";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/dashboard/attendance")({
@@ -15,14 +18,40 @@ export const Route = createFileRoute("/_authenticated/dashboard/attendance")({
 
 const STATUSES = ["Present", "Absent", "Late", "Excused"] as const;
 type Status = typeof STATUSES[number];
+const toDb = (s: Status) => s.toLowerCase();
 
 function AttendancePage() {
-  const [cls, setCls] = useState(classes[0].id);
+  const { classes, students } = useDashboard();
+  const canMark = useHasRole("admin", "principal", "teacher");
+  const [cls, setCls] = useState(classes[0]?.id ?? "");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
-  const classStudents = useMemo(() => students.filter((s) => s.classId === cls), [cls]);
+  const classStudents = useMemo(() => students.filter((s) => s.classId === cls), [cls, students]);
   const [records, setRecords] = useState<Record<string, Status>>({});
-
   const setStatus = (id: string, s: Status) => setRecords((r) => ({ ...r, [id]: s }));
+
+  const saveFn = useServerFn(saveAttendance);
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: () =>
+      saveFn({
+        data: {
+          date,
+          entries: Object.entries(records).map(([studentId, status]) => ({
+            studentId, status: toDb(status), classId: cls,
+          })),
+        },
+      }),
+    onSuccess: (r) => {
+      toast.success(`Saved ${r.count} attendance records`);
+      queryClient.invalidateQueries({ queryKey: ["dashboard", "snapshot"] });
+      setRecords({});
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  if (classes.length === 0) {
+    return <p className="text-sm text-muted-foreground">No classes available.</p>;
+  }
 
   return (
     <div className="space-y-6">
@@ -30,6 +59,12 @@ function AttendancePage() {
         <h1 className="text-2xl font-bold">Attendance</h1>
         <p className="text-sm text-muted-foreground">Mark attendance by class and date.</p>
       </div>
+
+      {!canMark && (
+        <p className="rounded-md border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-900 dark:bg-amber-950 dark:text-amber-100">
+          You have read-only access to attendance.
+        </p>
+      )}
 
       <Card>
         <CardHeader><CardTitle className="text-base">Mark attendance</CardTitle></CardHeader>
@@ -46,8 +81,12 @@ function AttendancePage() {
               <label htmlFor="date" className="block text-xs font-medium text-muted-foreground">Date</label>
               <Input id="date" type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-44" />
             </div>
-            <Button className="ml-auto" onClick={() => toast.success("Attendance saved", { description: `${Object.keys(records).length} marked.` })}>
-              Save attendance
+            <Button
+              className="ml-auto"
+              disabled={!canMark || Object.keys(records).length === 0 || mutation.isPending}
+              onClick={() => mutation.mutate()}
+            >
+              {mutation.isPending ? "Saving…" : "Save attendance"}
             </Button>
           </div>
 
@@ -55,7 +94,9 @@ function AttendancePage() {
             <Table>
               <TableHeader><TableRow><TableHead>Student</TableHead><TableHead>Status</TableHead></TableRow></TableHeader>
               <TableBody>
-                {classStudents.map((s) => (
+                {classStudents.length === 0 ? (
+                  <TableRow><TableCell colSpan={2} className="py-10 text-center text-muted-foreground">No students in this class.</TableCell></TableRow>
+                ) : classStudents.map((s) => (
                   <TableRow key={s.id}>
                     <TableCell>
                       <div className="flex items-center gap-3">
@@ -69,8 +110,9 @@ function AttendancePage() {
                           <button
                             key={st}
                             type="button"
+                            disabled={!canMark}
                             onClick={() => setStatus(s.id, st)}
-                            className={`rounded-md px-3 py-1 text-xs font-medium border ${records[s.id] === st ? "bg-primary text-primary-foreground border-primary" : "bg-card hover:bg-muted"}`}
+                            className={`rounded-md px-3 py-1 text-xs font-medium border disabled:opacity-50 ${records[s.id] === st ? "bg-primary text-primary-foreground border-primary" : "bg-card hover:bg-muted"}`}
                           >
                             {st}
                           </button>

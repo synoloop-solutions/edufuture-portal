@@ -37,6 +37,7 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated.dashboard.index'
 import { Route as AuthenticatedDashboardSubjectsRouteImport } from './routes/_authenticated.dashboard.subjects'
 import { Route as AuthenticatedDashboardSettingsRouteImport } from './routes/_authenticated.dashboard.settings'
+import { Route as AuthenticatedDashboardSearchRouteImport } from './routes/_authenticated.dashboard.search'
 import { Route as AuthenticatedDashboardResultsRouteImport } from './routes/_authenticated.dashboard.results'
 import { Route as AuthenticatedDashboardReportsRouteImport } from './routes/_authenticated.dashboard.reports'
 import { Route as AuthenticatedDashboardFeesRouteImport } from './routes/_authenticated.dashboard.fees'
@@ -47,6 +48,7 @@ import { Route as AuthenticatedDashboardTeachersIndexRouteImport } from './route
 import { Route as AuthenticatedDashboardStudentsIndexRouteImport } from './routes/_authenticated.dashboard.students.index'
 import { Route as AuthenticatedDashboardTeachersIdRouteImport } from './routes/_authenticated.dashboard.teachers.$id'
 import { Route as AuthenticatedDashboardStudentsIdRouteImport } from './routes/_authenticated.dashboard.students.$id'
+import { Route as AuthenticatedDashboardStudentsIdReportCardRouteImport } from './routes/_authenticated.dashboard.students.$id.report-card'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
@@ -190,6 +192,12 @@ const AuthenticatedDashboardSettingsRoute =
     path: '/settings',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedDashboardSearchRoute =
+  AuthenticatedDashboardSearchRouteImport.update({
+    id: '/search',
+    path: '/search',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedDashboardResultsRoute =
   AuthenticatedDashboardResultsRouteImport.update({
     id: '/results',
@@ -250,6 +258,12 @@ const AuthenticatedDashboardStudentsIdRoute =
     path: '/students/$id',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedDashboardStudentsIdReportCardRoute =
+  AuthenticatedDashboardStudentsIdReportCardRouteImport.update({
+    id: '/report-card',
+    path: '/report-card',
+    getParentRoute: () => AuthenticatedDashboardStudentsIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -282,13 +296,15 @@ export interface FileRoutesByFullPath {
   '/dashboard/fees': typeof AuthenticatedDashboardFeesRoute
   '/dashboard/reports': typeof AuthenticatedDashboardReportsRoute
   '/dashboard/results': typeof AuthenticatedDashboardResultsRoute
+  '/dashboard/search': typeof AuthenticatedDashboardSearchRoute
   '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard/subjects': typeof AuthenticatedDashboardSubjectsRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
-  '/dashboard/students/$id': typeof AuthenticatedDashboardStudentsIdRoute
+  '/dashboard/students/$id': typeof AuthenticatedDashboardStudentsIdRouteWithChildren
   '/dashboard/teachers/$id': typeof AuthenticatedDashboardTeachersIdRoute
   '/dashboard/students/': typeof AuthenticatedDashboardStudentsIndexRoute
   '/dashboard/teachers/': typeof AuthenticatedDashboardTeachersIndexRoute
+  '/dashboard/students/$id/report-card': typeof AuthenticatedDashboardStudentsIdReportCardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -320,13 +336,15 @@ export interface FileRoutesByTo {
   '/dashboard/fees': typeof AuthenticatedDashboardFeesRoute
   '/dashboard/reports': typeof AuthenticatedDashboardReportsRoute
   '/dashboard/results': typeof AuthenticatedDashboardResultsRoute
+  '/dashboard/search': typeof AuthenticatedDashboardSearchRoute
   '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard/subjects': typeof AuthenticatedDashboardSubjectsRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
-  '/dashboard/students/$id': typeof AuthenticatedDashboardStudentsIdRoute
+  '/dashboard/students/$id': typeof AuthenticatedDashboardStudentsIdRouteWithChildren
   '/dashboard/teachers/$id': typeof AuthenticatedDashboardTeachersIdRoute
   '/dashboard/students': typeof AuthenticatedDashboardStudentsIndexRoute
   '/dashboard/teachers': typeof AuthenticatedDashboardTeachersIndexRoute
+  '/dashboard/students/$id/report-card': typeof AuthenticatedDashboardStudentsIdReportCardRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -361,13 +379,15 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/fees': typeof AuthenticatedDashboardFeesRoute
   '/_authenticated/dashboard/reports': typeof AuthenticatedDashboardReportsRoute
   '/_authenticated/dashboard/results': typeof AuthenticatedDashboardResultsRoute
+  '/_authenticated/dashboard/search': typeof AuthenticatedDashboardSearchRoute
   '/_authenticated/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/_authenticated/dashboard/subjects': typeof AuthenticatedDashboardSubjectsRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
-  '/_authenticated/dashboard/students/$id': typeof AuthenticatedDashboardStudentsIdRoute
+  '/_authenticated/dashboard/students/$id': typeof AuthenticatedDashboardStudentsIdRouteWithChildren
   '/_authenticated/dashboard/teachers/$id': typeof AuthenticatedDashboardTeachersIdRoute
   '/_authenticated/dashboard/students/': typeof AuthenticatedDashboardStudentsIndexRoute
   '/_authenticated/dashboard/teachers/': typeof AuthenticatedDashboardTeachersIndexRoute
+  '/_authenticated/dashboard/students/$id/report-card': typeof AuthenticatedDashboardStudentsIdReportCardRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -402,6 +422,7 @@ export interface FileRouteTypes {
     | '/dashboard/fees'
     | '/dashboard/reports'
     | '/dashboard/results'
+    | '/dashboard/search'
     | '/dashboard/settings'
     | '/dashboard/subjects'
     | '/dashboard/'
@@ -409,6 +430,7 @@ export interface FileRouteTypes {
     | '/dashboard/teachers/$id'
     | '/dashboard/students/'
     | '/dashboard/teachers/'
+    | '/dashboard/students/$id/report-card'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -440,6 +462,7 @@ export interface FileRouteTypes {
     | '/dashboard/fees'
     | '/dashboard/reports'
     | '/dashboard/results'
+    | '/dashboard/search'
     | '/dashboard/settings'
     | '/dashboard/subjects'
     | '/dashboard'
@@ -447,6 +470,7 @@ export interface FileRouteTypes {
     | '/dashboard/teachers/$id'
     | '/dashboard/students'
     | '/dashboard/teachers'
+    | '/dashboard/students/$id/report-card'
   id:
     | '__root__'
     | '/'
@@ -480,6 +504,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/fees'
     | '/_authenticated/dashboard/reports'
     | '/_authenticated/dashboard/results'
+    | '/_authenticated/dashboard/search'
     | '/_authenticated/dashboard/settings'
     | '/_authenticated/dashboard/subjects'
     | '/_authenticated/dashboard/'
@@ -487,6 +512,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/teachers/$id'
     | '/_authenticated/dashboard/students/'
     | '/_authenticated/dashboard/teachers/'
+    | '/_authenticated/dashboard/students/$id/report-card'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -712,6 +738,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardSettingsRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/search': {
+      id: '/_authenticated/dashboard/search'
+      path: '/search'
+      fullPath: '/dashboard/search'
+      preLoaderRoute: typeof AuthenticatedDashboardSearchRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/dashboard/results': {
       id: '/_authenticated/dashboard/results'
       path: '/results'
@@ -782,8 +815,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardStudentsIdRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/students/$id/report-card': {
+      id: '/_authenticated/dashboard/students/$id/report-card'
+      path: '/report-card'
+      fullPath: '/dashboard/students/$id/report-card'
+      preLoaderRoute: typeof AuthenticatedDashboardStudentsIdReportCardRouteImport
+      parentRoute: typeof AuthenticatedDashboardStudentsIdRoute
+    }
   }
 }
+
+interface AuthenticatedDashboardStudentsIdRouteChildren {
+  AuthenticatedDashboardStudentsIdReportCardRoute: typeof AuthenticatedDashboardStudentsIdReportCardRoute
+}
+
+const AuthenticatedDashboardStudentsIdRouteChildren: AuthenticatedDashboardStudentsIdRouteChildren =
+  {
+    AuthenticatedDashboardStudentsIdReportCardRoute:
+      AuthenticatedDashboardStudentsIdReportCardRoute,
+  }
+
+const AuthenticatedDashboardStudentsIdRouteWithChildren =
+  AuthenticatedDashboardStudentsIdRoute._addFileChildren(
+    AuthenticatedDashboardStudentsIdRouteChildren,
+  )
 
 interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardAnnouncementsRoute: typeof AuthenticatedDashboardAnnouncementsRoute
@@ -792,10 +847,11 @@ interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardFeesRoute: typeof AuthenticatedDashboardFeesRoute
   AuthenticatedDashboardReportsRoute: typeof AuthenticatedDashboardReportsRoute
   AuthenticatedDashboardResultsRoute: typeof AuthenticatedDashboardResultsRoute
+  AuthenticatedDashboardSearchRoute: typeof AuthenticatedDashboardSearchRoute
   AuthenticatedDashboardSettingsRoute: typeof AuthenticatedDashboardSettingsRoute
   AuthenticatedDashboardSubjectsRoute: typeof AuthenticatedDashboardSubjectsRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
-  AuthenticatedDashboardStudentsIdRoute: typeof AuthenticatedDashboardStudentsIdRoute
+  AuthenticatedDashboardStudentsIdRoute: typeof AuthenticatedDashboardStudentsIdRouteWithChildren
   AuthenticatedDashboardTeachersIdRoute: typeof AuthenticatedDashboardTeachersIdRoute
   AuthenticatedDashboardStudentsIndexRoute: typeof AuthenticatedDashboardStudentsIndexRoute
   AuthenticatedDashboardTeachersIndexRoute: typeof AuthenticatedDashboardTeachersIndexRoute
@@ -811,11 +867,12 @@ const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
     AuthenticatedDashboardFeesRoute: AuthenticatedDashboardFeesRoute,
     AuthenticatedDashboardReportsRoute: AuthenticatedDashboardReportsRoute,
     AuthenticatedDashboardResultsRoute: AuthenticatedDashboardResultsRoute,
+    AuthenticatedDashboardSearchRoute: AuthenticatedDashboardSearchRoute,
     AuthenticatedDashboardSettingsRoute: AuthenticatedDashboardSettingsRoute,
     AuthenticatedDashboardSubjectsRoute: AuthenticatedDashboardSubjectsRoute,
     AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
     AuthenticatedDashboardStudentsIdRoute:
-      AuthenticatedDashboardStudentsIdRoute,
+      AuthenticatedDashboardStudentsIdRouteWithChildren,
     AuthenticatedDashboardTeachersIdRoute:
       AuthenticatedDashboardTeachersIdRoute,
     AuthenticatedDashboardStudentsIndexRoute:
@@ -880,13 +937,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
