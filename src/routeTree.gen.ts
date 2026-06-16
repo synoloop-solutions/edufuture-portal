@@ -26,10 +26,17 @@ import { Route as StaffIndexRouteImport } from './routes/staff.index'
 import { Route as NewsIndexRouteImport } from './routes/news.index'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as DepartmentsIndexRouteImport } from './routes/departments.index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as StaffSlugRouteImport } from './routes/staff.$slug'
 import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 import { Route as EventsSlugRouteImport } from './routes/events.$slug'
 import { Route as DepartmentsSlugRouteImport } from './routes/departments.$slug'
+import { Route as DashboardResultsRouteImport } from './routes/dashboard.results'
+import { Route as DashboardAttendanceRouteImport } from './routes/dashboard.attendance'
+import { Route as DashboardTeachersIndexRouteImport } from './routes/dashboard.teachers.index'
+import { Route as DashboardStudentsIndexRouteImport } from './routes/dashboard.students.index'
+import { Route as DashboardTeachersIdRouteImport } from './routes/dashboard.teachers.$id'
+import { Route as DashboardStudentsIdRouteImport } from './routes/dashboard.students.$id'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
@@ -116,6 +123,11 @@ const DepartmentsIndexRoute = DepartmentsIndexRouteImport.update({
   path: '/departments/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const StaffSlugRoute = StaffSlugRouteImport.update({
   id: '/staff/$slug',
   path: '/staff/$slug',
@@ -136,6 +148,36 @@ const DepartmentsSlugRoute = DepartmentsSlugRouteImport.update({
   path: '/departments/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardResultsRoute = DashboardResultsRouteImport.update({
+  id: '/results',
+  path: '/results',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAttendanceRoute = DashboardAttendanceRouteImport.update({
+  id: '/attendance',
+  path: '/attendance',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardTeachersIndexRoute = DashboardTeachersIndexRouteImport.update({
+  id: '/teachers/',
+  path: '/teachers/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardStudentsIndexRoute = DashboardStudentsIndexRouteImport.update({
+  id: '/students/',
+  path: '/students/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardTeachersIdRoute = DashboardTeachersIdRouteImport.update({
+  id: '/teachers/$id',
+  path: '/teachers/$id',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardStudentsIdRoute = DashboardStudentsIdRouteImport.update({
+  id: '/students/$id',
+  path: '/students/$id',
+  getParentRoute: () => DashboardRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -145,20 +187,27 @@ export interface FileRoutesByFullPath {
   '/admissions': typeof AdmissionsRoute
   '/contact': typeof ContactRoute
   '/cookie-policy': typeof CookiePolicyRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/gallery': typeof GalleryRoute
   '/privacy': typeof PrivacyRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/dashboard/attendance': typeof DashboardAttendanceRoute
+  '/dashboard/results': typeof DashboardResultsRoute
   '/departments/$slug': typeof DepartmentsSlugRoute
   '/events/$slug': typeof EventsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/staff/$slug': typeof StaffSlugRoute
+  '/dashboard/': typeof DashboardIndexRoute
   '/departments/': typeof DepartmentsIndexRoute
   '/events/': typeof EventsIndexRoute
   '/news/': typeof NewsIndexRoute
   '/staff/': typeof StaffIndexRoute
+  '/dashboard/students/$id': typeof DashboardStudentsIdRoute
+  '/dashboard/teachers/$id': typeof DashboardTeachersIdRoute
+  '/dashboard/students/': typeof DashboardStudentsIndexRoute
+  '/dashboard/teachers/': typeof DashboardTeachersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -168,20 +217,26 @@ export interface FileRoutesByTo {
   '/admissions': typeof AdmissionsRoute
   '/contact': typeof ContactRoute
   '/cookie-policy': typeof CookiePolicyRoute
-  '/dashboard': typeof DashboardRoute
   '/gallery': typeof GalleryRoute
   '/privacy': typeof PrivacyRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/dashboard/attendance': typeof DashboardAttendanceRoute
+  '/dashboard/results': typeof DashboardResultsRoute
   '/departments/$slug': typeof DepartmentsSlugRoute
   '/events/$slug': typeof EventsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/staff/$slug': typeof StaffSlugRoute
+  '/dashboard': typeof DashboardIndexRoute
   '/departments': typeof DepartmentsIndexRoute
   '/events': typeof EventsIndexRoute
   '/news': typeof NewsIndexRoute
   '/staff': typeof StaffIndexRoute
+  '/dashboard/students/$id': typeof DashboardStudentsIdRoute
+  '/dashboard/teachers/$id': typeof DashboardTeachersIdRoute
+  '/dashboard/students': typeof DashboardStudentsIndexRoute
+  '/dashboard/teachers': typeof DashboardTeachersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -192,20 +247,27 @@ export interface FileRoutesById {
   '/admissions': typeof AdmissionsRoute
   '/contact': typeof ContactRoute
   '/cookie-policy': typeof CookiePolicyRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/gallery': typeof GalleryRoute
   '/privacy': typeof PrivacyRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/dashboard/attendance': typeof DashboardAttendanceRoute
+  '/dashboard/results': typeof DashboardResultsRoute
   '/departments/$slug': typeof DepartmentsSlugRoute
   '/events/$slug': typeof EventsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/staff/$slug': typeof StaffSlugRoute
+  '/dashboard/': typeof DashboardIndexRoute
   '/departments/': typeof DepartmentsIndexRoute
   '/events/': typeof EventsIndexRoute
   '/news/': typeof NewsIndexRoute
   '/staff/': typeof StaffIndexRoute
+  '/dashboard/students/$id': typeof DashboardStudentsIdRoute
+  '/dashboard/teachers/$id': typeof DashboardTeachersIdRoute
+  '/dashboard/students/': typeof DashboardStudentsIndexRoute
+  '/dashboard/teachers/': typeof DashboardTeachersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -223,14 +285,21 @@ export interface FileRouteTypes {
     | '/search'
     | '/sitemap.xml'
     | '/terms'
+    | '/dashboard/attendance'
+    | '/dashboard/results'
     | '/departments/$slug'
     | '/events/$slug'
     | '/news/$slug'
     | '/staff/$slug'
+    | '/dashboard/'
     | '/departments/'
     | '/events/'
     | '/news/'
     | '/staff/'
+    | '/dashboard/students/$id'
+    | '/dashboard/teachers/$id'
+    | '/dashboard/students/'
+    | '/dashboard/teachers/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -240,20 +309,26 @@ export interface FileRouteTypes {
     | '/admissions'
     | '/contact'
     | '/cookie-policy'
-    | '/dashboard'
     | '/gallery'
     | '/privacy'
     | '/search'
     | '/sitemap.xml'
     | '/terms'
+    | '/dashboard/attendance'
+    | '/dashboard/results'
     | '/departments/$slug'
     | '/events/$slug'
     | '/news/$slug'
     | '/staff/$slug'
+    | '/dashboard'
     | '/departments'
     | '/events'
     | '/news'
     | '/staff'
+    | '/dashboard/students/$id'
+    | '/dashboard/teachers/$id'
+    | '/dashboard/students'
+    | '/dashboard/teachers'
   id:
     | '__root__'
     | '/'
@@ -269,14 +344,21 @@ export interface FileRouteTypes {
     | '/search'
     | '/sitemap.xml'
     | '/terms'
+    | '/dashboard/attendance'
+    | '/dashboard/results'
     | '/departments/$slug'
     | '/events/$slug'
     | '/news/$slug'
     | '/staff/$slug'
+    | '/dashboard/'
     | '/departments/'
     | '/events/'
     | '/news/'
     | '/staff/'
+    | '/dashboard/students/$id'
+    | '/dashboard/teachers/$id'
+    | '/dashboard/students/'
+    | '/dashboard/teachers/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -287,7 +369,7 @@ export interface RootRouteChildren {
   AdmissionsRoute: typeof AdmissionsRoute
   ContactRoute: typeof ContactRoute
   CookiePolicyRoute: typeof CookiePolicyRoute
-  DashboardRoute: typeof DashboardRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
   GalleryRoute: typeof GalleryRoute
   PrivacyRoute: typeof PrivacyRoute
   SearchRoute: typeof SearchRoute
@@ -424,6 +506,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DepartmentsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/staff/$slug': {
       id: '/staff/$slug'
       path: '/staff/$slug'
@@ -452,8 +541,74 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DepartmentsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/results': {
+      id: '/dashboard/results'
+      path: '/results'
+      fullPath: '/dashboard/results'
+      preLoaderRoute: typeof DashboardResultsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/attendance': {
+      id: '/dashboard/attendance'
+      path: '/attendance'
+      fullPath: '/dashboard/attendance'
+      preLoaderRoute: typeof DashboardAttendanceRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/teachers/': {
+      id: '/dashboard/teachers/'
+      path: '/teachers'
+      fullPath: '/dashboard/teachers/'
+      preLoaderRoute: typeof DashboardTeachersIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/students/': {
+      id: '/dashboard/students/'
+      path: '/students'
+      fullPath: '/dashboard/students/'
+      preLoaderRoute: typeof DashboardStudentsIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/teachers/$id': {
+      id: '/dashboard/teachers/$id'
+      path: '/teachers/$id'
+      fullPath: '/dashboard/teachers/$id'
+      preLoaderRoute: typeof DashboardTeachersIdRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/students/$id': {
+      id: '/dashboard/students/$id'
+      path: '/students/$id'
+      fullPath: '/dashboard/students/$id'
+      preLoaderRoute: typeof DashboardStudentsIdRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
+
+interface DashboardRouteChildren {
+  DashboardAttendanceRoute: typeof DashboardAttendanceRoute
+  DashboardResultsRoute: typeof DashboardResultsRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardStudentsIdRoute: typeof DashboardStudentsIdRoute
+  DashboardTeachersIdRoute: typeof DashboardTeachersIdRoute
+  DashboardStudentsIndexRoute: typeof DashboardStudentsIndexRoute
+  DashboardTeachersIndexRoute: typeof DashboardTeachersIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardAttendanceRoute: DashboardAttendanceRoute,
+  DashboardResultsRoute: DashboardResultsRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+  DashboardStudentsIdRoute: DashboardStudentsIdRoute,
+  DashboardTeachersIdRoute: DashboardTeachersIdRoute,
+  DashboardStudentsIndexRoute: DashboardStudentsIndexRoute,
+  DashboardTeachersIndexRoute: DashboardTeachersIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -463,7 +618,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdmissionsRoute: AdmissionsRoute,
   ContactRoute: ContactRoute,
   CookiePolicyRoute: CookiePolicyRoute,
-  DashboardRoute: DashboardRoute,
+  DashboardRoute: DashboardRouteWithChildren,
   GalleryRoute: GalleryRoute,
   PrivacyRoute: PrivacyRoute,
   SearchRoute: SearchRoute,
