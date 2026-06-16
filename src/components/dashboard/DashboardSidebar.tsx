@@ -1,7 +1,7 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard, Users, GraduationCap, CalendarCheck, ClipboardList,
-  Wallet, BookOpen, Layers, FileBarChart, Megaphone, Settings, LogOut, Search,
+  Wallet, BookOpen, Layers, FileBarChart, Megaphone, Settings, LogOut, Search, Home,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
@@ -9,6 +9,9 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { site } from "@/data/site";
+import { supabase } from "@/integrations/supabase/client";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const items = [
   { title: "Overview", to: "/dashboard", icon: LayoutDashboard, exact: true },
@@ -29,8 +32,19 @@ export function DashboardSidebar() {
   const collapsed = state === "collapsed";
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   const isActive = (to: string, exact?: boolean) =>
     exact ? pathname === to : pathname === to || pathname.startsWith(`${to}/`);
+
+  async function handleSignOut() {
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await supabase.auth.signOut();
+    toast.success("Signed out");
+    navigate({ to: "/auth", replace: true });
+  }
 
   return (
     <Sidebar collapsible="icon">
@@ -74,7 +88,12 @@ export function DashboardSidebar() {
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton asChild tooltip="Back to site">
-              <Link to="/"><LogOut className="h-4 w-4" /><span>Back to site</span></Link>
+              <Link to="/"><Home className="h-4 w-4" /><span>Back to site</span></Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton tooltip="Sign out" onClick={handleSignOut}>
+              <LogOut className="h-4 w-4" /><span>Sign out</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
