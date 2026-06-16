@@ -46,11 +46,7 @@ function Home() {
         />
         <div className="absolute inset-0 bg-gradient-to-br from-primary/95 via-primary/85 to-primary/60" aria-hidden="true" />
         <div className="relative mx-auto grid w-full max-w-7xl gap-10 px-4 py-20 lg:grid-cols-2 lg:gap-16 lg:px-8 lg:py-28">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
+          <div>
             <p className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-gold">
               Welcome to {site.name}
             </p>
@@ -71,17 +67,12 @@ function Home() {
                 <Link to="/about">Tour the school</Link>
               </Button>
             </div>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="hidden lg:block"
-          >
+          </div>
+          <div className="hidden lg:block">
             <div className="relative aspect-[4/5] overflow-hidden rounded-2xl shadow-2xl ring-1 ring-primary-foreground/10">
               <img src={images.heroStudents} alt="Students at BrightFuture Academy" className="h-full w-full object-cover" loading="lazy" />
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
