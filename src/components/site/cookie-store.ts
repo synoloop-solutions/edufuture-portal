@@ -43,9 +43,11 @@ export function hasDecided(): boolean {
 type Listener = () => void;
 const listeners = new Set<Listener>();
 
-export function subscribeOpenPreferences(cb: Listener) {
+export function subscribeOpenPreferences(cb: Listener): () => void {
   listeners.add(cb);
-  return () => listeners.delete(cb);
+  return () => {
+    listeners.delete(cb);
+  };
 }
 
 export function openCookiePreferences() {
