@@ -7,6 +7,7 @@ import {
   Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList,
   BreadcrumbPage, BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { dashboardSnapshotQuery, myAccessQuery } from "@/lib/dashboard-hooks";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -16,13 +17,24 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
       { name: "robots", content: "noindex" },
     ],
   }),
+  loader: async ({ context }) => {
+    await Promise.all([
+      context.queryClient.ensureQueryData(myAccessQuery),
+      context.queryClient.ensureQueryData(dashboardSnapshotQuery),
+    ]);
+  },
   component: DashboardLayout,
+  errorComponent: ({ error }) => (
+    <div className="mx-auto max-w-xl py-20 text-center">
+      <h1 className="text-2xl font-bold">Unable to load dashboard</h1>
+      <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
+    </div>
+  ),
 });
 
 function DashboardLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const crumbs = buildCrumbs(pathname);
-
   return (
     <SidebarProvider>
       <div className="flex min-h-dvh w-full bg-muted/30">
@@ -73,6 +85,6 @@ function buildCrumbs(pathname: string) {
 
 function prettyLabel(seg: string) {
   if (seg === "dashboard") return "Dashboard";
-  if (/^st-\d+$/.test(seg) || /^t-\d+$/.test(seg)) return seg.toUpperCase();
+  if (/^[0-9a-f-]{20,}$/.test(seg)) return seg.slice(0, 8) + "…";
   return seg[0].toUpperCase() + seg.slice(1);
 }
