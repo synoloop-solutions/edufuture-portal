@@ -2,13 +2,15 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { classes, teachers, findTeacher } from "@/data/dashboard";
+import { useDashboard } from "@/lib/dashboard-hooks";
 
 export const Route = createFileRoute("/_authenticated/dashboard/classes")({
   component: ClassesPage,
 });
 
 function ClassesPage() {
+  const { classes, teachers } = useDashboard();
+  const teacherMap = new Map(teachers.map((t) => [t.id, t]));
   return (
     <div className="space-y-6">
       <div>
@@ -23,7 +25,7 @@ function ClassesPage() {
             </TableHeader>
             <TableBody>
               {classes.map((c) => {
-                const t = findTeacher(c.teacherId);
+                const t = teacherMap.get(c.teacherId);
                 return (
                   <TableRow key={c.id}>
                     <TableCell className="font-medium">{c.name}</TableCell>
