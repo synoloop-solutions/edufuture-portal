@@ -12,17 +12,20 @@ import { site } from "@/data/site";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useMyRoles } from "@/lib/dashboard-hooks";
 
-const items = [
+type NavItem = { title: string; to: string; icon: typeof LayoutDashboard; exact?: boolean; roles?: string[] };
+
+const items: NavItem[] = [
   { title: "Overview", to: "/dashboard", icon: LayoutDashboard, exact: true },
   { title: "Students", to: "/dashboard/students", icon: Users },
-  { title: "Teachers", to: "/dashboard/teachers", icon: GraduationCap },
-  { title: "Attendance", to: "/dashboard/attendance", icon: CalendarCheck },
-  { title: "Results", to: "/dashboard/results", icon: ClipboardList },
-  { title: "Fees", to: "/dashboard/fees", icon: Wallet },
+  { title: "Teachers", to: "/dashboard/teachers", icon: GraduationCap, roles: ["admin", "principal", "teacher", "bursar"] },
+  { title: "Attendance", to: "/dashboard/attendance", icon: CalendarCheck, roles: ["admin", "principal", "teacher", "student", "parent"] },
+  { title: "Results", to: "/dashboard/results", icon: ClipboardList, roles: ["admin", "principal", "teacher", "student", "parent"] },
+  { title: "Fees", to: "/dashboard/fees", icon: Wallet, roles: ["admin", "principal", "bursar", "parent"] },
   { title: "Classes", to: "/dashboard/classes", icon: Layers },
   { title: "Subjects", to: "/dashboard/subjects", icon: BookOpen },
-  { title: "Reports", to: "/dashboard/reports", icon: FileBarChart },
+  { title: "Reports", to: "/dashboard/reports", icon: FileBarChart, roles: ["admin", "principal", "bursar"] },
   { title: "Announcements", to: "/dashboard/announcements", icon: Megaphone },
   { title: "Settings", to: "/dashboard/settings", icon: Settings },
 ];
@@ -31,9 +34,15 @@ export function DashboardSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-
+  const roles = useMyRoles();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  const canSee = (item: NavItem) => {
+    if (!item.roles) return true;
+    if (roles.includes("admin") || roles.includes("principal")) return true;
+    return item.roles.some((r) => roles.includes(r));
+  };
 
   const isActive = (to: string, exact?: boolean) =>
     exact ? pathname === to : pathname === to || pathname.startsWith(`${to}/`);
@@ -64,7 +73,7 @@ export function DashboardSidebar() {
           <SidebarGroupLabel>Workspace</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
+              {items.filter(canSee).map((item) => (
                 <SidebarMenuItem key={item.to}>
                   <SidebarMenuButton asChild isActive={isActive(item.to, item.exact)} tooltip={item.title}>
                     <Link to={item.to} className="flex items-center gap-2">
@@ -74,6 +83,14 @@ export function DashboardSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={pathname === "/dashboard/search"} tooltip="Search">
+                  <Link to="/dashboard/search" className="flex items-center gap-2">
+                    <Search className="h-4 w-4" />
+                    <span>Search</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -81,11 +98,6 @@ export function DashboardSidebar() {
 
       <SidebarFooter>
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip="Site search">
-              <Link to="/search"><Search className="h-4 w-4" /><span>Search site</span></Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton asChild tooltip="Back to site">
               <Link to="/"><Home className="h-4 w-4" /><span>Back to site</span></Link>

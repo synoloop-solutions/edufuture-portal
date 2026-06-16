@@ -37,6 +37,7 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated.dashboard.index'
 import { Route as AuthenticatedDashboardSubjectsRouteImport } from './routes/_authenticated.dashboard.subjects'
 import { Route as AuthenticatedDashboardSettingsRouteImport } from './routes/_authenticated.dashboard.settings'
+import { Route as AuthenticatedDashboardSearchRouteImport } from './routes/_authenticated.dashboard.search'
 import { Route as AuthenticatedDashboardResultsRouteImport } from './routes/_authenticated.dashboard.results'
 import { Route as AuthenticatedDashboardReportsRouteImport } from './routes/_authenticated.dashboard.reports'
 import { Route as AuthenticatedDashboardFeesRouteImport } from './routes/_authenticated.dashboard.fees'
@@ -191,6 +192,12 @@ const AuthenticatedDashboardSettingsRoute =
     path: '/settings',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedDashboardSearchRoute =
+  AuthenticatedDashboardSearchRouteImport.update({
+    id: '/search',
+    path: '/search',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedDashboardResultsRoute =
   AuthenticatedDashboardResultsRouteImport.update({
     id: '/results',
@@ -289,6 +296,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/fees': typeof AuthenticatedDashboardFeesRoute
   '/dashboard/reports': typeof AuthenticatedDashboardReportsRoute
   '/dashboard/results': typeof AuthenticatedDashboardResultsRoute
+  '/dashboard/search': typeof AuthenticatedDashboardSearchRoute
   '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard/subjects': typeof AuthenticatedDashboardSubjectsRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
@@ -328,6 +336,7 @@ export interface FileRoutesByTo {
   '/dashboard/fees': typeof AuthenticatedDashboardFeesRoute
   '/dashboard/reports': typeof AuthenticatedDashboardReportsRoute
   '/dashboard/results': typeof AuthenticatedDashboardResultsRoute
+  '/dashboard/search': typeof AuthenticatedDashboardSearchRoute
   '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard/subjects': typeof AuthenticatedDashboardSubjectsRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
@@ -370,6 +379,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/fees': typeof AuthenticatedDashboardFeesRoute
   '/_authenticated/dashboard/reports': typeof AuthenticatedDashboardReportsRoute
   '/_authenticated/dashboard/results': typeof AuthenticatedDashboardResultsRoute
+  '/_authenticated/dashboard/search': typeof AuthenticatedDashboardSearchRoute
   '/_authenticated/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/_authenticated/dashboard/subjects': typeof AuthenticatedDashboardSubjectsRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
@@ -412,6 +422,7 @@ export interface FileRouteTypes {
     | '/dashboard/fees'
     | '/dashboard/reports'
     | '/dashboard/results'
+    | '/dashboard/search'
     | '/dashboard/settings'
     | '/dashboard/subjects'
     | '/dashboard/'
@@ -451,6 +462,7 @@ export interface FileRouteTypes {
     | '/dashboard/fees'
     | '/dashboard/reports'
     | '/dashboard/results'
+    | '/dashboard/search'
     | '/dashboard/settings'
     | '/dashboard/subjects'
     | '/dashboard'
@@ -492,6 +504,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/fees'
     | '/_authenticated/dashboard/reports'
     | '/_authenticated/dashboard/results'
+    | '/_authenticated/dashboard/search'
     | '/_authenticated/dashboard/settings'
     | '/_authenticated/dashboard/subjects'
     | '/_authenticated/dashboard/'
@@ -725,6 +738,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardSettingsRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/search': {
+      id: '/_authenticated/dashboard/search'
+      path: '/search'
+      fullPath: '/dashboard/search'
+      preLoaderRoute: typeof AuthenticatedDashboardSearchRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/dashboard/results': {
       id: '/_authenticated/dashboard/results'
       path: '/results'
@@ -827,6 +847,7 @@ interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardFeesRoute: typeof AuthenticatedDashboardFeesRoute
   AuthenticatedDashboardReportsRoute: typeof AuthenticatedDashboardReportsRoute
   AuthenticatedDashboardResultsRoute: typeof AuthenticatedDashboardResultsRoute
+  AuthenticatedDashboardSearchRoute: typeof AuthenticatedDashboardSearchRoute
   AuthenticatedDashboardSettingsRoute: typeof AuthenticatedDashboardSettingsRoute
   AuthenticatedDashboardSubjectsRoute: typeof AuthenticatedDashboardSubjectsRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
@@ -846,6 +867,7 @@ const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
     AuthenticatedDashboardFeesRoute: AuthenticatedDashboardFeesRoute,
     AuthenticatedDashboardReportsRoute: AuthenticatedDashboardReportsRoute,
     AuthenticatedDashboardResultsRoute: AuthenticatedDashboardResultsRoute,
+    AuthenticatedDashboardSearchRoute: AuthenticatedDashboardSearchRoute,
     AuthenticatedDashboardSettingsRoute: AuthenticatedDashboardSettingsRoute,
     AuthenticatedDashboardSubjectsRoute: AuthenticatedDashboardSubjectsRoute,
     AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
