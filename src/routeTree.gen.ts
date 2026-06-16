@@ -47,6 +47,7 @@ import { Route as AuthenticatedDashboardTeachersIndexRouteImport } from './route
 import { Route as AuthenticatedDashboardStudentsIndexRouteImport } from './routes/_authenticated.dashboard.students.index'
 import { Route as AuthenticatedDashboardTeachersIdRouteImport } from './routes/_authenticated.dashboard.teachers.$id'
 import { Route as AuthenticatedDashboardStudentsIdRouteImport } from './routes/_authenticated.dashboard.students.$id'
+import { Route as AuthenticatedDashboardStudentsIdReportCardRouteImport } from './routes/_authenticated.dashboard.students.$id.report-card'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
@@ -250,6 +251,12 @@ const AuthenticatedDashboardStudentsIdRoute =
     path: '/students/$id',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedDashboardStudentsIdReportCardRoute =
+  AuthenticatedDashboardStudentsIdReportCardRouteImport.update({
+    id: '/report-card',
+    path: '/report-card',
+    getParentRoute: () => AuthenticatedDashboardStudentsIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -285,10 +292,11 @@ export interface FileRoutesByFullPath {
   '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard/subjects': typeof AuthenticatedDashboardSubjectsRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
-  '/dashboard/students/$id': typeof AuthenticatedDashboardStudentsIdRoute
+  '/dashboard/students/$id': typeof AuthenticatedDashboardStudentsIdRouteWithChildren
   '/dashboard/teachers/$id': typeof AuthenticatedDashboardTeachersIdRoute
   '/dashboard/students/': typeof AuthenticatedDashboardStudentsIndexRoute
   '/dashboard/teachers/': typeof AuthenticatedDashboardTeachersIndexRoute
+  '/dashboard/students/$id/report-card': typeof AuthenticatedDashboardStudentsIdReportCardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -323,10 +331,11 @@ export interface FileRoutesByTo {
   '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard/subjects': typeof AuthenticatedDashboardSubjectsRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
-  '/dashboard/students/$id': typeof AuthenticatedDashboardStudentsIdRoute
+  '/dashboard/students/$id': typeof AuthenticatedDashboardStudentsIdRouteWithChildren
   '/dashboard/teachers/$id': typeof AuthenticatedDashboardTeachersIdRoute
   '/dashboard/students': typeof AuthenticatedDashboardStudentsIndexRoute
   '/dashboard/teachers': typeof AuthenticatedDashboardTeachersIndexRoute
+  '/dashboard/students/$id/report-card': typeof AuthenticatedDashboardStudentsIdReportCardRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -364,10 +373,11 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/_authenticated/dashboard/subjects': typeof AuthenticatedDashboardSubjectsRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
-  '/_authenticated/dashboard/students/$id': typeof AuthenticatedDashboardStudentsIdRoute
+  '/_authenticated/dashboard/students/$id': typeof AuthenticatedDashboardStudentsIdRouteWithChildren
   '/_authenticated/dashboard/teachers/$id': typeof AuthenticatedDashboardTeachersIdRoute
   '/_authenticated/dashboard/students/': typeof AuthenticatedDashboardStudentsIndexRoute
   '/_authenticated/dashboard/teachers/': typeof AuthenticatedDashboardTeachersIndexRoute
+  '/_authenticated/dashboard/students/$id/report-card': typeof AuthenticatedDashboardStudentsIdReportCardRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -409,6 +419,7 @@ export interface FileRouteTypes {
     | '/dashboard/teachers/$id'
     | '/dashboard/students/'
     | '/dashboard/teachers/'
+    | '/dashboard/students/$id/report-card'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -447,6 +458,7 @@ export interface FileRouteTypes {
     | '/dashboard/teachers/$id'
     | '/dashboard/students'
     | '/dashboard/teachers'
+    | '/dashboard/students/$id/report-card'
   id:
     | '__root__'
     | '/'
@@ -487,6 +499,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/teachers/$id'
     | '/_authenticated/dashboard/students/'
     | '/_authenticated/dashboard/teachers/'
+    | '/_authenticated/dashboard/students/$id/report-card'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -782,8 +795,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardStudentsIdRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/students/$id/report-card': {
+      id: '/_authenticated/dashboard/students/$id/report-card'
+      path: '/report-card'
+      fullPath: '/dashboard/students/$id/report-card'
+      preLoaderRoute: typeof AuthenticatedDashboardStudentsIdReportCardRouteImport
+      parentRoute: typeof AuthenticatedDashboardStudentsIdRoute
+    }
   }
 }
+
+interface AuthenticatedDashboardStudentsIdRouteChildren {
+  AuthenticatedDashboardStudentsIdReportCardRoute: typeof AuthenticatedDashboardStudentsIdReportCardRoute
+}
+
+const AuthenticatedDashboardStudentsIdRouteChildren: AuthenticatedDashboardStudentsIdRouteChildren =
+  {
+    AuthenticatedDashboardStudentsIdReportCardRoute:
+      AuthenticatedDashboardStudentsIdReportCardRoute,
+  }
+
+const AuthenticatedDashboardStudentsIdRouteWithChildren =
+  AuthenticatedDashboardStudentsIdRoute._addFileChildren(
+    AuthenticatedDashboardStudentsIdRouteChildren,
+  )
 
 interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardAnnouncementsRoute: typeof AuthenticatedDashboardAnnouncementsRoute
@@ -795,7 +830,7 @@ interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardSettingsRoute: typeof AuthenticatedDashboardSettingsRoute
   AuthenticatedDashboardSubjectsRoute: typeof AuthenticatedDashboardSubjectsRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
-  AuthenticatedDashboardStudentsIdRoute: typeof AuthenticatedDashboardStudentsIdRoute
+  AuthenticatedDashboardStudentsIdRoute: typeof AuthenticatedDashboardStudentsIdRouteWithChildren
   AuthenticatedDashboardTeachersIdRoute: typeof AuthenticatedDashboardTeachersIdRoute
   AuthenticatedDashboardStudentsIndexRoute: typeof AuthenticatedDashboardStudentsIndexRoute
   AuthenticatedDashboardTeachersIndexRoute: typeof AuthenticatedDashboardTeachersIndexRoute
@@ -815,7 +850,7 @@ const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
     AuthenticatedDashboardSubjectsRoute: AuthenticatedDashboardSubjectsRoute,
     AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
     AuthenticatedDashboardStudentsIdRoute:
-      AuthenticatedDashboardStudentsIdRoute,
+      AuthenticatedDashboardStudentsIdRouteWithChildren,
     AuthenticatedDashboardTeachersIdRoute:
       AuthenticatedDashboardTeachersIdRoute,
     AuthenticatedDashboardStudentsIndexRoute:
