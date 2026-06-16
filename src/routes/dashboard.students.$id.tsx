@@ -1,0 +1,164 @@
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { ArrowLeft, Mail, Phone, Home as HomeIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  students, findStudent, className as classLabel, attendance, results, fees, subjectName,
+} from "@/data/dashboard";
+
+export const Route = createFileRoute("/dashboard/students/$id")({
+  loader: ({ params }): { student: (typeof students)[number] } => {
+    const student = findStudent(params.id);
+    if (!student) throw notFound();
+    return { student };
+  },
+  component: StudentDetail,
+  notFoundComponent: () => (
+    <div className="mx-auto max-w-xl text-center py-20">
+      <h1 className="text-2xl font-bold">Student not found</h1>
+      <Button asChild className="mt-6"><Link to="/dashboard/students">Back to students</Link></Button>
+    </div>
+  ),
+  errorComponent: () => (
+    <div className="mx-auto max-w-xl text-center py-20">
+      <h1 className="text-2xl font-bold">Something went wrong</h1>
+      <Button asChild className="mt-6"><Link to="/dashboard/students">Back to students</Link></Button>
+    </div>
+  ),
+});
+
+function StudentDetail() {
+  const { student: s } = Route.useLoaderData() as { student: (typeof students)[number] };
+  const att = attendance.filter((a) => a.studentId === s.id);
+  const res = results.filter((r) => r.studentId === s.id);
+  const fee = fees.filter((f) => f.studentId === s.id);
+
+  return (
+    <div className="space-y-6">
+      <Button asChild variant="ghost" size="sm">
+        <Link to="/dashboard/students"><ArrowLeft className="mr-1 h-4 w-4" /> Back to students</Link>
+      </Button>
+
+      <Card>
+        <CardContent className="flex flex-col items-start gap-6 p-6 md:flex-row md:items-center">
+          <img src={s.photo} alt="" className="h-24 w-24 rounded-xl object-cover" />
+          <div className="flex-1 min-w-0">
+            <h1 className="text-2xl font-bold">{s.firstName} {s.lastName}</h1>
+            <p className="text-sm text-muted-foreground">{classLabel(s.classId)} • ID {s.id}</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Badge variant="outline">{s.gender}</Badge>
+              <Badge variant="outline">DOB {s.dateOfBirth}</Badge>
+              <Badge variant={s.feeStatus === "Paid" ? "secondary" : s.feeStatus === "Outstanding" ? "destructive" : "outline"}>
+                Fees: {s.feeStatus}
+              </Badge>
+              <Badge variant="outline">Attendance {s.attendancePercentage}%</Badge>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Tabs defaultValue="profile">
+        <TabsList>
+          <TabsTrigger value="profile">Profile</TabsTrigger>
+          <TabsTrigger value="attendance">Attendance</TabsTrigger>
+          <TabsTrigger value="results">Results</TabsTrigger>
+          <TabsTrigger value="fees">Fees</TabsTrigger>
+          <TabsTrigger value="parent">Parent</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="profile">
+          <Card><CardHeader><CardTitle className="text-base">Profile</CardTitle></CardHeader>
+            <CardContent className="grid gap-3 text-sm md:grid-cols-2">
+              <Info label="Class" value={classLabel(s.classId)} />
+              <Info label="Gender" value={s.gender} />
+              <Info label="Date of birth" value={s.dateOfBirth} />
+              <Info label="Enrolled" value={s.createdAt} />
+              <Info label="Address" value={s.address} icon={<HomeIcon className="h-4 w-4" />} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="attendance">
+          <Card><CardHeader><CardTitle className="text-base">Attendance history (last 10 days)</CardTitle></CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader><TableRow><TableHead>Date</TableHead><TableHead>Status</TableHead></TableRow></TableHeader>
+                <TableBody>
+                  {att.map((a) => (
+                    <TableRow key={a.id}>
+                      <TableCell>{a.date}</TableCell>
+                      <TableCell><Badge variant={a.status === "Present" ? "secondary" : a.status === "Absent" ? "destructive" : "outline"}>{a.status}</Badge></TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="results">
+          <Card><CardHeader><CardTitle className="text-base">Results — 1st term, 2025/2026</CardTitle></CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader><TableRow><TableHead>Subject</TableHead><TableHead>Score</TableHead><TableHead>Grade</TableHead></TableRow></TableHeader>
+                <TableBody>
+                  {res.map((r) => (
+                    <TableRow key={r.id}>
+                      <TableCell>{subjectName(r.subjectId)}</TableCell>
+                      <TableCell>{r.score}</TableCell>
+                      <TableCell><Badge variant="outline">{r.grade}</Badge></TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="fees">
+          <Card><CardHeader><CardTitle className="text-base">Fee records</CardTitle></CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader><TableRow><TableHead>Term</TableHead><TableHead>Session</TableHead><TableHead>Amount</TableHead><TableHead>Status</TableHead><TableHead>Paid on</TableHead></TableRow></TableHeader>
+                <TableBody>
+                  {fee.map((f) => (
+                    <TableRow key={f.id}>
+                      <TableCell>{f.term}</TableCell>
+                      <TableCell>{f.session}</TableCell>
+                      <TableCell>₦{f.amount.toLocaleString()}</TableCell>
+                      <TableCell><Badge variant={f.status === "Paid" ? "secondary" : f.status === "Outstanding" ? "destructive" : "outline"}>{f.status}</Badge></TableCell>
+                      <TableCell>{f.paymentDate ?? "—"}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="parent">
+          <Card><CardHeader><CardTitle className="text-base">Parent / guardian</CardTitle></CardHeader>
+            <CardContent className="grid gap-3 text-sm md:grid-cols-2">
+              <Info label="Parent name" value={s.parentName} />
+              <Info label="Phone" value={s.parentPhone} icon={<Phone className="h-4 w-4" />} />
+              <Info label="Email" value={`parent.${s.id}@example.com`} icon={<Mail className="h-4 w-4" />} />
+              <Info label="Address" value={s.address} icon={<HomeIcon className="h-4 w-4" />} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}
+
+function Info({ label, value, icon }: { label: string; value: string; icon?: React.ReactNode }) {
+  return (
+    <div className="rounded-lg border bg-muted/30 p-3">
+      <p className="text-xs uppercase tracking-wider text-muted-foreground">{label}</p>
+      <p className="mt-1 flex items-center gap-2 font-medium">{icon}{value}</p>
+    </div>
+  );
+}

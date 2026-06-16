@@ -14,6 +14,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CookiePolicyRouteImport } from './routes/cookie-policy'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AdmissionsRouteImport } from './routes/admissions'
@@ -53,6 +54,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const GalleryRoute = GalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CookiePolicyRoute = CookiePolicyRouteImport.update({
@@ -139,6 +145,7 @@ export interface FileRoutesByFullPath {
   '/admissions': typeof AdmissionsRoute
   '/contact': typeof ContactRoute
   '/cookie-policy': typeof CookiePolicyRoute
+  '/dashboard': typeof DashboardRoute
   '/gallery': typeof GalleryRoute
   '/privacy': typeof PrivacyRoute
   '/search': typeof SearchRoute
@@ -161,6 +168,7 @@ export interface FileRoutesByTo {
   '/admissions': typeof AdmissionsRoute
   '/contact': typeof ContactRoute
   '/cookie-policy': typeof CookiePolicyRoute
+  '/dashboard': typeof DashboardRoute
   '/gallery': typeof GalleryRoute
   '/privacy': typeof PrivacyRoute
   '/search': typeof SearchRoute
@@ -184,6 +192,7 @@ export interface FileRoutesById {
   '/admissions': typeof AdmissionsRoute
   '/contact': typeof ContactRoute
   '/cookie-policy': typeof CookiePolicyRoute
+  '/dashboard': typeof DashboardRoute
   '/gallery': typeof GalleryRoute
   '/privacy': typeof PrivacyRoute
   '/search': typeof SearchRoute
@@ -208,6 +217,7 @@ export interface FileRouteTypes {
     | '/admissions'
     | '/contact'
     | '/cookie-policy'
+    | '/dashboard'
     | '/gallery'
     | '/privacy'
     | '/search'
@@ -230,6 +240,7 @@ export interface FileRouteTypes {
     | '/admissions'
     | '/contact'
     | '/cookie-policy'
+    | '/dashboard'
     | '/gallery'
     | '/privacy'
     | '/search'
@@ -252,6 +263,7 @@ export interface FileRouteTypes {
     | '/admissions'
     | '/contact'
     | '/cookie-policy'
+    | '/dashboard'
     | '/gallery'
     | '/privacy'
     | '/search'
@@ -275,6 +287,7 @@ export interface RootRouteChildren {
   AdmissionsRoute: typeof AdmissionsRoute
   ContactRoute: typeof ContactRoute
   CookiePolicyRoute: typeof CookiePolicyRoute
+  DashboardRoute: typeof DashboardRoute
   GalleryRoute: typeof GalleryRoute
   PrivacyRoute: typeof PrivacyRoute
   SearchRoute: typeof SearchRoute
@@ -325,6 +338,13 @@ declare module '@tanstack/react-router' {
       path: '/gallery'
       fullPath: '/gallery'
       preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cookie-policy': {
@@ -443,6 +463,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdmissionsRoute: AdmissionsRoute,
   ContactRoute: ContactRoute,
   CookiePolicyRoute: CookiePolicyRoute,
+  DashboardRoute: DashboardRoute,
   GalleryRoute: GalleryRoute,
   PrivacyRoute: PrivacyRoute,
   SearchRoute: SearchRoute,
