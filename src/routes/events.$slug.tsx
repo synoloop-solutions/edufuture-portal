@@ -63,7 +63,7 @@ export const Route = createFileRoute("/events/$slug")({
 });
 
 function EventDetail() {
-  const { event: e } = Route.useLoaderData();
+  const { event: e } = Route.useLoaderData() as { event: (typeof events)[number] };
   return (
     <SiteLayout>
       <div className="bg-muted/50 py-8">

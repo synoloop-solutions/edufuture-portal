@@ -63,7 +63,7 @@ export const Route = createFileRoute("/news/$slug")({
 });
 
 function NewsDetail() {
-  const { article } = Route.useLoaderData();
+  const { article } = Route.useLoaderData() as { article: (typeof news)[number] };
   return (
     <SiteLayout>
       <article>
