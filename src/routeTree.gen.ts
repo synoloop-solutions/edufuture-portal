@@ -31,8 +31,13 @@ import { Route as StaffSlugRouteImport } from './routes/staff.$slug'
 import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 import { Route as EventsSlugRouteImport } from './routes/events.$slug'
 import { Route as DepartmentsSlugRouteImport } from './routes/departments.$slug'
+import { Route as DashboardSubjectsRouteImport } from './routes/dashboard.subjects'
+import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
 import { Route as DashboardResultsRouteImport } from './routes/dashboard.results'
+import { Route as DashboardReportsRouteImport } from './routes/dashboard.reports'
+import { Route as DashboardClassesRouteImport } from './routes/dashboard.classes'
 import { Route as DashboardAttendanceRouteImport } from './routes/dashboard.attendance'
+import { Route as DashboardAnnouncementsRouteImport } from './routes/dashboard.announcements'
 import { Route as DashboardTeachersIndexRouteImport } from './routes/dashboard.teachers.index'
 import { Route as DashboardStudentsIndexRouteImport } from './routes/dashboard.students.index'
 import { Route as DashboardTeachersIdRouteImport } from './routes/dashboard.teachers.$id'
@@ -148,14 +153,39 @@ const DepartmentsSlugRoute = DepartmentsSlugRouteImport.update({
   path: '/departments/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardSubjectsRoute = DashboardSubjectsRouteImport.update({
+  id: '/subjects',
+  path: '/subjects',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardResultsRoute = DashboardResultsRouteImport.update({
   id: '/results',
   path: '/results',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardReportsRoute = DashboardReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardClassesRoute = DashboardClassesRouteImport.update({
+  id: '/classes',
+  path: '/classes',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardAttendanceRoute = DashboardAttendanceRouteImport.update({
   id: '/attendance',
   path: '/attendance',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAnnouncementsRoute = DashboardAnnouncementsRouteImport.update({
+  id: '/announcements',
+  path: '/announcements',
   getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardTeachersIndexRoute = DashboardTeachersIndexRouteImport.update({
@@ -193,8 +223,13 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/dashboard/announcements': typeof DashboardAnnouncementsRoute
   '/dashboard/attendance': typeof DashboardAttendanceRoute
+  '/dashboard/classes': typeof DashboardClassesRoute
+  '/dashboard/reports': typeof DashboardReportsRoute
   '/dashboard/results': typeof DashboardResultsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/subjects': typeof DashboardSubjectsRoute
   '/departments/$slug': typeof DepartmentsSlugRoute
   '/events/$slug': typeof EventsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
@@ -222,8 +257,13 @@ export interface FileRoutesByTo {
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/dashboard/announcements': typeof DashboardAnnouncementsRoute
   '/dashboard/attendance': typeof DashboardAttendanceRoute
+  '/dashboard/classes': typeof DashboardClassesRoute
+  '/dashboard/reports': typeof DashboardReportsRoute
   '/dashboard/results': typeof DashboardResultsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/subjects': typeof DashboardSubjectsRoute
   '/departments/$slug': typeof DepartmentsSlugRoute
   '/events/$slug': typeof EventsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
@@ -253,8 +293,13 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/dashboard/announcements': typeof DashboardAnnouncementsRoute
   '/dashboard/attendance': typeof DashboardAttendanceRoute
+  '/dashboard/classes': typeof DashboardClassesRoute
+  '/dashboard/reports': typeof DashboardReportsRoute
   '/dashboard/results': typeof DashboardResultsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/subjects': typeof DashboardSubjectsRoute
   '/departments/$slug': typeof DepartmentsSlugRoute
   '/events/$slug': typeof EventsSlugRoute
   '/news/$slug': typeof NewsSlugRoute
@@ -285,8 +330,13 @@ export interface FileRouteTypes {
     | '/search'
     | '/sitemap.xml'
     | '/terms'
+    | '/dashboard/announcements'
     | '/dashboard/attendance'
+    | '/dashboard/classes'
+    | '/dashboard/reports'
     | '/dashboard/results'
+    | '/dashboard/settings'
+    | '/dashboard/subjects'
     | '/departments/$slug'
     | '/events/$slug'
     | '/news/$slug'
@@ -314,8 +364,13 @@ export interface FileRouteTypes {
     | '/search'
     | '/sitemap.xml'
     | '/terms'
+    | '/dashboard/announcements'
     | '/dashboard/attendance'
+    | '/dashboard/classes'
+    | '/dashboard/reports'
     | '/dashboard/results'
+    | '/dashboard/settings'
+    | '/dashboard/subjects'
     | '/departments/$slug'
     | '/events/$slug'
     | '/news/$slug'
@@ -344,8 +399,13 @@ export interface FileRouteTypes {
     | '/search'
     | '/sitemap.xml'
     | '/terms'
+    | '/dashboard/announcements'
     | '/dashboard/attendance'
+    | '/dashboard/classes'
+    | '/dashboard/reports'
     | '/dashboard/results'
+    | '/dashboard/settings'
+    | '/dashboard/subjects'
     | '/departments/$slug'
     | '/events/$slug'
     | '/news/$slug'
@@ -541,6 +601,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DepartmentsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/subjects': {
+      id: '/dashboard/subjects'
+      path: '/subjects'
+      fullPath: '/dashboard/subjects'
+      preLoaderRoute: typeof DashboardSubjectsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/settings': {
+      id: '/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof DashboardSettingsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/results': {
       id: '/dashboard/results'
       path: '/results'
@@ -548,11 +622,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardResultsRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/reports': {
+      id: '/dashboard/reports'
+      path: '/reports'
+      fullPath: '/dashboard/reports'
+      preLoaderRoute: typeof DashboardReportsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/classes': {
+      id: '/dashboard/classes'
+      path: '/classes'
+      fullPath: '/dashboard/classes'
+      preLoaderRoute: typeof DashboardClassesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/attendance': {
       id: '/dashboard/attendance'
       path: '/attendance'
       fullPath: '/dashboard/attendance'
       preLoaderRoute: typeof DashboardAttendanceRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/announcements': {
+      id: '/dashboard/announcements'
+      path: '/announcements'
+      fullPath: '/dashboard/announcements'
+      preLoaderRoute: typeof DashboardAnnouncementsRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/teachers/': {
@@ -587,8 +682,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface DashboardRouteChildren {
+  DashboardAnnouncementsRoute: typeof DashboardAnnouncementsRoute
   DashboardAttendanceRoute: typeof DashboardAttendanceRoute
+  DashboardClassesRoute: typeof DashboardClassesRoute
+  DashboardReportsRoute: typeof DashboardReportsRoute
   DashboardResultsRoute: typeof DashboardResultsRoute
+  DashboardSettingsRoute: typeof DashboardSettingsRoute
+  DashboardSubjectsRoute: typeof DashboardSubjectsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   DashboardStudentsIdRoute: typeof DashboardStudentsIdRoute
   DashboardTeachersIdRoute: typeof DashboardTeachersIdRoute
@@ -597,8 +697,13 @@ interface DashboardRouteChildren {
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardAnnouncementsRoute: DashboardAnnouncementsRoute,
   DashboardAttendanceRoute: DashboardAttendanceRoute,
+  DashboardClassesRoute: DashboardClassesRoute,
+  DashboardReportsRoute: DashboardReportsRoute,
   DashboardResultsRoute: DashboardResultsRoute,
+  DashboardSettingsRoute: DashboardSettingsRoute,
+  DashboardSubjectsRoute: DashboardSubjectsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   DashboardStudentsIdRoute: DashboardStudentsIdRoute,
   DashboardTeachersIdRoute: DashboardTeachersIdRoute,
