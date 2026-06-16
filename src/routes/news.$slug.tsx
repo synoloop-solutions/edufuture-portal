@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { news } from "@/data/news";
 
 export const Route = createFileRoute("/news/$slug")({
-  loader: ({ params }) => {
+  loader: ({ params }): { article: (typeof news)[number] } => {
     const article = news.find((n) => n.slug === params.slug);
     if (!article) throw notFound();
     return { article };

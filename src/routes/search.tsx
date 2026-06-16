@@ -74,8 +74,7 @@ function SearchPage() {
                   <li key={`${r.kind}-${i}`} className="rounded-xl border bg-card p-4">
                     <p className="text-xs font-medium uppercase tracking-wider text-primary">{r.kind}</p>
                     <h2 className="mt-1 text-lg font-semibold">
-                      {/* @ts-expect-error - dynamic Link */}
-                      <Link to={r.to} params={r.params} className="hover:underline">{r.title}</Link>
+                      <Link to={r.to as "/news/$slug"} params={r.params as { slug: string }} className="hover:underline">{r.title}</Link>
                     </h2>
                     <p className="mt-1 text-sm text-muted-foreground">{r.description}</p>
                   </li>

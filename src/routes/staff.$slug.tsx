@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { staff } from "@/data/staff";
 
 export const Route = createFileRoute("/staff/$slug")({
-  loader: ({ params }) => {
+  loader: ({ params }): { member: (typeof staff)[number] } => {
     const member = staff.find((s) => s.slug === params.slug);
     if (!member) throw notFound();
     return { member };

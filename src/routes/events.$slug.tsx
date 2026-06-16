@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { events } from "@/data/events";
 
 export const Route = createFileRoute("/events/$slug")({
-  loader: ({ params }) => {
+  loader: ({ params }): { event: (typeof events)[number] } => {
     const event = events.find((e) => e.slug === params.slug);
     if (!event) throw notFound();
     return { event };

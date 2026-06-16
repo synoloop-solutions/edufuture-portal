@@ -6,7 +6,7 @@ import { departments } from "@/data/departments";
 import { staff } from "@/data/staff";
 
 export const Route = createFileRoute("/departments/$slug")({
-  loader: ({ params }) => {
+  loader: ({ params }): { dept: (typeof departments)[number] } => {
     const dept = departments.find((d) => d.slug === params.slug);
     if (!dept) throw notFound();
     return { dept };
