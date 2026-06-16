@@ -47,7 +47,7 @@ export const Route = createFileRoute("/staff/$slug")({
 });
 
 function StaffDetail() {
-  const { member } = Route.useLoaderData();
+  const { member } = Route.useLoaderData() as { member: (typeof staff)[number] };
   return (
     <SiteLayout>
       <section className="bg-muted/50 py-12">
