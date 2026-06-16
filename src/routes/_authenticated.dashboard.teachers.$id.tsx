@@ -5,14 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { teachers, findTeacher, subjects, classes } from "@/data/dashboard";
+import { useDashboard } from "@/lib/dashboard-hooks";
 
 export const Route = createFileRoute("/_authenticated/dashboard/teachers/$id")({
-  loader: ({ params }): { teacher: (typeof teachers)[number] } => {
-    const teacher = findTeacher(params.id);
-    if (!teacher) throw notFound();
-    return { teacher };
-  },
   component: TeacherDetail,
   notFoundComponent: () => (
     <div className="mx-auto max-w-xl text-center py-20">
@@ -29,9 +24,12 @@ export const Route = createFileRoute("/_authenticated/dashboard/teachers/$id")({
 });
 
 function TeacherDetail() {
-  const { teacher: t } = Route.useLoaderData() as { teacher: (typeof teachers)[number] };
-  const teaches = subjects.filter((s) => s.teacherIds.includes(t.id));
-  const teachingClasses = classes.filter((c) => c.teacherId === t.id);
+  const { id } = Route.useParams();
+  const data = useDashboard();
+  const t = data.teachers.find((x) => x.id === id);
+  if (!t) throw notFound();
+  const teaches = data.subjects.filter((s) => t.subjects.includes(s.code));
+  const teachingClasses = data.classes.filter((c) => c.teacherId === t.id);
 
   return (
     <div className="space-y-6">
@@ -44,7 +42,7 @@ function TeacherDetail() {
           <img src={t.photo} alt="" className="h-24 w-24 rounded-xl object-cover" />
           <div className="flex-1 min-w-0">
             <h1 className="text-2xl font-bold">{t.firstName} {t.lastName}</h1>
-            <p className="text-sm text-muted-foreground">{t.department} • ID {t.id}</p>
+            <p className="text-sm text-muted-foreground">{t.department}</p>
             <div className="mt-3 flex flex-wrap gap-2">
               <Badge variant="outline">{t.qualification}</Badge>
               <Badge variant="outline">{t.yearsOfExperience} years</Badge>
@@ -52,8 +50,8 @@ function TeacherDetail() {
             </div>
           </div>
           <div className="flex flex-col gap-2 text-sm">
-            <a href={`mailto:${t.email}`} className="flex items-center gap-2 text-primary hover:underline"><Mail className="h-4 w-4" /> {t.email}</a>
-            <p className="flex items-center gap-2 text-muted-foreground"><Phone className="h-4 w-4" /> {t.phone}</p>
+            {t.email && <a href={`mailto:${t.email}`} className="flex items-center gap-2 text-primary hover:underline"><Mail className="h-4 w-4" /> {t.email}</a>}
+            {t.phone && <p className="flex items-center gap-2 text-muted-foreground"><Phone className="h-4 w-4" /> {t.phone}</p>}
           </div>
         </CardContent>
       </Card>
@@ -71,7 +69,7 @@ function TeacherDetail() {
               {teaches.length === 0 ? <p className="text-sm text-muted-foreground">No assigned subjects yet.</p> :
                 <Table>
                   <TableHeader><TableRow><TableHead>Subject</TableHead><TableHead>Code</TableHead><TableHead>Classes</TableHead></TableRow></TableHeader>
-                  <TableBody>{teaches.map(s => (
+                  <TableBody>{teaches.map((s) => (
                     <TableRow key={s.id}><TableCell>{s.name}</TableCell><TableCell className="font-mono">{s.code}</TableCell><TableCell>{s.classes.length}</TableCell></TableRow>
                   ))}</TableBody>
                 </Table>}
@@ -80,7 +78,7 @@ function TeacherDetail() {
         </TabsContent>
 
         <TabsContent value="classes">
-          <Card><CardHeader><CardTitle className="text-base">Form classes</CardTitle></CardHeader>
+          <Card><CardHeader><CardTitle className="text-base">Homeroom classes</CardTitle></CardHeader>
             <CardContent>
               {teachingClasses.length === 0 ? <p className="text-sm text-muted-foreground">Not currently a form tutor.</p> :
                 <ul className="space-y-2">
