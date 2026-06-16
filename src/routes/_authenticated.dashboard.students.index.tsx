@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Plus, Search, Eye } from "lucide-react";
+import { Search, Eye } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -9,8 +9,7 @@ import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { students, classes, className } from "@/data/dashboard";
-import { toast } from "sonner";
+import { useDashboard } from "@/lib/dashboard-hooks";
 
 export const Route = createFileRoute("/_authenticated/dashboard/students/")({
   component: StudentsPage,
@@ -19,6 +18,8 @@ export const Route = createFileRoute("/_authenticated/dashboard/students/")({
 const PAGE_SIZE = 10;
 
 function StudentsPage() {
+  const { students, classes } = useDashboard();
+  const classMap = useMemo(() => new Map(classes.map((c) => [c.id, c.name])), [classes]);
   const [q, setQ] = useState("");
   const [cls, setCls] = useState("all");
   const [page, setPage] = useState(1);
@@ -30,7 +31,7 @@ function StudentsPage() {
       if (term && !`${s.firstName} ${s.lastName} ${s.id}`.toLowerCase().includes(term)) return false;
       return true;
     });
-  }, [q, cls]);
+  }, [q, cls, students]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const current = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -42,9 +43,6 @@ function StudentsPage() {
           <h1 className="text-2xl font-bold">Students</h1>
           <p className="text-sm text-muted-foreground">{students.length} students enrolled</p>
         </div>
-        <Button onClick={() => toast.info("Add student", { description: "Hook up to backend in Phase 3." })}>
-          <Plus className="mr-1 h-4 w-4" /> Add student
-        </Button>
       </div>
 
       <Card className="p-4">
@@ -68,7 +66,6 @@ function StudentsPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Student</TableHead>
-                <TableHead>ID</TableHead>
                 <TableHead>Class</TableHead>
                 <TableHead>Gender</TableHead>
                 <TableHead>Attendance</TableHead>
@@ -78,7 +75,7 @@ function StudentsPage() {
             </TableHeader>
             <TableBody>
               {current.length === 0 ? (
-                <TableRow><TableCell colSpan={7} className="py-10 text-center text-muted-foreground">No students match your filters.</TableCell></TableRow>
+                <TableRow><TableCell colSpan={6} className="py-10 text-center text-muted-foreground">No students match your filters.</TableCell></TableRow>
               ) : current.map((s) => (
                 <TableRow key={s.id}>
                   <TableCell>
@@ -89,8 +86,7 @@ function StudentsPage() {
                       </Link>
                     </div>
                   </TableCell>
-                  <TableCell className="font-mono text-xs">{s.id}</TableCell>
-                  <TableCell>{className(s.classId)}</TableCell>
+                  <TableCell>{classMap.get(s.classId) ?? "—"}</TableCell>
                   <TableCell>{s.gender}</TableCell>
                   <TableCell>{s.attendancePercentage}%</TableCell>
                   <TableCell>
