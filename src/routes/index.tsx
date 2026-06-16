@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+// (framer-motion intentionally not used on the hero to avoid SSR opacity-0 flash)
 import { ArrowRight, GraduationCap, Award, Users, Heart, BookOpen, Trophy } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Button } from "@/components/ui/button";
