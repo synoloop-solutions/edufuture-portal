@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { site } from "@/data/site";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/dashboard/settings")({
+export const Route = createFileRoute("/_authenticated/dashboard/settings")({
   component: SettingsPage,
 });
 

@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { announcements as seed, type Announcement } from "@/data/dashboard";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/dashboard/announcements")({
+export const Route = createFileRoute("/_authenticated/dashboard/announcements")({
   component: AnnouncementsPage,
 });
 

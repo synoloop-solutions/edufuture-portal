@@ -44,7 +44,7 @@ export function SiteHeader() {
 
         <div className="hidden items-center gap-2 lg:flex">
           <Button asChild variant="outline" size="sm">
-            <Link to="/dashboard">Sign In</Link>
+            <Link to="/auth">Sign In</Link>
           </Button>
           <Button asChild size="sm" className="bg-gold text-gold-foreground hover:bg-gold/90">
             <Link to="/admissions">Apply Now</Link>
@@ -76,7 +76,7 @@ export function SiteHeader() {
             ))}
             <div className="mt-2 flex gap-2 pt-2">
               <Button asChild variant="outline" className="flex-1">
-                <Link to="/dashboard">Sign In</Link>
+                <Link to="/auth">Sign In</Link>
               </Button>
               <Button asChild className="flex-1 bg-gold text-gold-foreground hover:bg-gold/90">
                 <Link to="/admissions">Apply</Link>

@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/dashboard/reports")({
+export const Route = createFileRoute("/_authenticated/dashboard/reports")({
   component: ReportsPage,
 });
 

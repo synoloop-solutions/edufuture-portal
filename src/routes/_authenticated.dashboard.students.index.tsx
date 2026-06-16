@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { students, classes, className } from "@/data/dashboard";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/dashboard/students/")({
+export const Route = createFileRoute("/_authenticated/dashboard/students/")({
   component: StudentsPage,
 });
 

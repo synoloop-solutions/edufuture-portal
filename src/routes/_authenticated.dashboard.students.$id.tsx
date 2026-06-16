@@ -9,7 +9,7 @@ import {
   students, findStudent, className as classLabel, attendance, results, fees, subjectName,
 } from "@/data/dashboard";
 
-export const Route = createFileRoute("/dashboard/students/$id")({
+export const Route = createFileRoute("/_authenticated/dashboard/students/$id")({
   loader: ({ params }): { student: (typeof students)[number] } => {
     const student = findStudent(params.id);
     if (!student) throw notFound();

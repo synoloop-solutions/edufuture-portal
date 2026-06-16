@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { teachers, findTeacher, subjects, classes } from "@/data/dashboard";
 
-export const Route = createFileRoute("/dashboard/teachers/$id")({
+export const Route = createFileRoute("/_authenticated/dashboard/teachers/$id")({
   loader: ({ params }): { teacher: (typeof teachers)[number] } => {
     const teacher = findTeacher(params.id);
     if (!teacher) throw notFound();
