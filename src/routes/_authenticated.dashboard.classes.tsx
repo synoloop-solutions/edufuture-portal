@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { classes, teachers, findTeacher } from "@/data/dashboard";
 
-export const Route = createFileRoute("/dashboard/classes")({
+export const Route = createFileRoute("/_authenticated/dashboard/classes")({
   component: ClassesPage,
 });
 

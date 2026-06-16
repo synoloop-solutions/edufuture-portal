@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { classes, students } from "@/data/dashboard";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/dashboard/attendance")({
+export const Route = createFileRoute("/_authenticated/dashboard/attendance")({
   component: AttendancePage,
 });
 
