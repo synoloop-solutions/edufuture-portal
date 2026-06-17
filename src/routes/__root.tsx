@@ -90,6 +90,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "theme-color", content: "#0b2545" },
+      { property: "og:title", content: "BrightFuture Academy — Nurturing tomorrow's leaders" },
+      { name: "twitter:title", content: "BrightFuture Academy — Nurturing tomorrow's leaders" },
+      { name: "description", content: "A comprehensive school website and management system for educational institutions." },
+      { property: "og:description", content: "A comprehensive school website and management system for educational institutions." },
+      { name: "twitter:description", content: "A comprehensive school website and management system for educational institutions." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/2104c695-7ece-403a-a6ce-449a1806fa0c/id-preview-5871998d--9f6d7d02-bb9b-4b7c-9e9b-e9f9c4c69cf2.lovable.app-1781642899820.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/2104c695-7ece-403a-a6ce-449a1806fa0c/id-preview-5871998d--9f6d7d02-bb9b-4b7c-9e9b-e9f9c4c69cf2.lovable.app-1781642899820.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
